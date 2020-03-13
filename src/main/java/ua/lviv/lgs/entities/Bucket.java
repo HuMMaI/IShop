@@ -1,13 +1,42 @@
 package ua.lviv.lgs.entities;
 
-import java.time.LocalDateTime;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.Objects;
 
 public class Bucket {
     private int id;
     private int userId;
     private int productId;
-    private LocalDateTime purchaseDate;
+    private Date purchaseDate;
+
+    public Bucket(int id, int userId, int productId, Date purchaseDate) {
+        this.id = id;
+        this.userId = userId;
+        this.productId = productId;
+        this.purchaseDate = purchaseDate;
+    }
+
+    public Bucket(int userId, int productId, Date purchaseDate) {
+        this.userId = userId;
+        this.productId = productId;
+        this.purchaseDate = purchaseDate;
+    }
+
+    public static Bucket of(ResultSet resultSet){
+        try {
+            int id = resultSet.getInt("id");
+            int userId = resultSet.getInt("user_id");
+            int productId = resultSet.getInt("product_id");
+            Date purchaseDate = resultSet.getDate("purchase_date");
+
+            return new Bucket(id, userId, productId, purchaseDate);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can't create bucket");
+        }
+    }
 
     public int getId() {
         return id;
@@ -33,11 +62,11 @@ public class Bucket {
         this.productId = productId;
     }
 
-    public LocalDateTime getPurchaseDate() {
+    public Date getPurchaseDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(LocalDateTime purchaseDate) {
+    public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
 

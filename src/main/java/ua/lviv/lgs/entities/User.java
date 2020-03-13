@@ -19,6 +19,13 @@ public class User {
         this.role = role;
     }
 
+    public User(String email, String firstName, String lastName, String role) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
     public static User of(ResultSet resultSet){
         try {
             int id = resultSet.getInt("id");
