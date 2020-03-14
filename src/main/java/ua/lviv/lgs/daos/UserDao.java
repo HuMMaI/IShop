@@ -12,10 +12,10 @@ public class UserDao implements CRUD<User> {
     private static final String SELECT_BY_ID = "SELECT * FROM users WHERE id=?";
     private static final String SELECT_ALL = "SELECT * FROM users";
     private static final String UPDATE =
-            "UPDATE users SET email=?, first_name=?, last_name=?, role=? WHERE id=?";
+            "UPDATE users SET email=?, first_name=?, last_name=?, role=?, password=? WHERE id=?";
     private static final String DELETE_BY_ID = "DELETE FROM users WHERE id=?";
     private static final String INSERT =
-            "INSERT INTO users(email, first_name, last_name, role) VALUES (?, ?, ?, ?)";
+            "INSERT INTO users(email, first_name, last_name, role, password) VALUES (?, ?, ?, ?, ?)";
 
     public UserDao() {
         connection = ConnectionUtil.getConnection();
@@ -66,7 +66,8 @@ public class UserDao implements CRUD<User> {
             preparedStatement.setString(2, user.getFirstName());
             preparedStatement.setString(3, user.getLastName());
             preparedStatement.setString(4, user.getRole());
-            preparedStatement.setInt(5, id);
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setInt(6, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -96,6 +97,7 @@ public class UserDao implements CRUD<User> {
             preparedStatement.setString(2, user.getFirstName());
             preparedStatement.setString(3, user.getLastName());
             preparedStatement.setString(4, user.getRole());
+            preparedStatement.setString(5, user.getPassword());
             preparedStatement.executeUpdate();
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();

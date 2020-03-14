@@ -10,20 +10,23 @@ public class User {
     private String firstName;
     private String lastName;
     private String role;
+    private String password;
 
-    public User(int id, String email, String firstName, String lastName, String role) {
+    public User(int id, String email, String firstName, String lastName, String role, String password) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.password = password;
     }
 
-    public User(String email, String firstName, String lastName, String role) {
+    public User(String email, String firstName, String lastName, String role, String password) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.password = password;
     }
 
     public static User of(ResultSet resultSet){
@@ -33,8 +36,9 @@ public class User {
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
             String role = resultSet.getString("role");
+            String password = resultSet.getString("password");
 
-            return new User(id, email, firstName, lastName, role);
+            return new User(id, email, firstName, lastName, role, password);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Can't create user");
@@ -81,21 +85,12 @@ public class User {
         this.role = role;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(role, user.role);
+    public String getPassword() {
+        return password;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, firstName, lastName, role);
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -103,9 +98,10 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", fisrtName='" + firstName + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role='" + role + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
