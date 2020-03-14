@@ -1,11 +1,13 @@
 package ua.lviv.lgs.daos;
 
+import org.apache.log4j.Logger;
 import ua.lviv.lgs.ConnectionUtil;
 import ua.lviv.lgs.entities.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDao implements CRUD<User> {
     private Connection connection;
@@ -16,6 +18,7 @@ public class UserDao implements CRUD<User> {
     private static final String DELETE_BY_ID = "DELETE FROM users WHERE id=?";
     private static final String INSERT =
             "INSERT INTO users(email, first_name, last_name, role, password) VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_BY_EMAIL = "SELECT * FROM users WHERE email=?";
 
     public UserDao() {
         connection = ConnectionUtil.getConnection();
@@ -108,6 +111,24 @@ public class UserDao implements CRUD<User> {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Can't insert user");
+        }
+    }
+
+    public Optional<User> getByEmail(String email) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_EMAIL);
+
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()){
+                return Optional.of(User.of(resultSet));
+            }
+
+            return Optional.empty();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can't find user");
         }
     }
 }
