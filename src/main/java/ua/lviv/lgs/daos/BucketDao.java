@@ -1,13 +1,17 @@
 package ua.lviv.lgs.daos;
 
+import org.apache.log4j.Logger;
 import ua.lviv.lgs.ConnectionUtil;
 import ua.lviv.lgs.entities.Bucket;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BucketDao implements CRUD<Bucket>{
+    private static Logger LOG = Logger.getLogger(BucketDao.class);
+
     private Connection connection;
     private static final String SELECT_BY_ID = "SELECT * FROM bucket WHERE id=?";
     private static final String SELECT_ALL = "SELECT * FROM bucket";
@@ -22,7 +26,7 @@ public class BucketDao implements CRUD<Bucket>{
     }
 
     @Override
-    public Bucket getById(int id) {
+    public Optional<Bucket> getById(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
 
@@ -30,15 +34,17 @@ public class BucketDao implements CRUD<Bucket>{
             ResultSet resultSet = preparedStatement.executeQuery();
 
             resultSet.next();
-            return Bucket.of(resultSet);
+            return Optional.ofNullable(Bucket.of(resultSet));
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find bucket");
+            String error = String.format("Can't find bucket with id = %d", id);
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 
     @Override
-    public List<Bucket> getAll() {
+    public Optional<List<Bucket>> getAll() {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
@@ -49,11 +55,13 @@ public class BucketDao implements CRUD<Bucket>{
                 buckets.add(Bucket.of(resultSet));
             }
 
-            return buckets;
+            return Optional.ofNullable(buckets);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find buckets");
+            String error = "Can't find buckets";
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 
     @Override
@@ -68,8 +76,8 @@ public class BucketDao implements CRUD<Bucket>{
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't update bucket");
+            String error = String.format("Can't update bucket with id = %d", id);
+            LOG.error(error, e);
         }
     }
 
@@ -80,8 +88,8 @@ public class BucketDao implements CRUD<Bucket>{
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't delete bucket");
+            String error = String.format("Can't delete bucket with id = %d", id);
+            LOG.error(error, e);
         }
     }
 
@@ -101,8 +109,11 @@ public class BucketDao implements CRUD<Bucket>{
 
             return generatedKeys.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't insert bucket");
+            String error = String.format("Can't create bucket with user id = %d and product id = %d",
+                    bucket.getUserId(), bucket.getProductId());
+            LOG.error(error, e);
         }
+
+        return 0;
     }
 }

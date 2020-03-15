@@ -8,7 +8,8 @@ CREATE TABLE users(
     email VARCHAR(30) NOT NULL UNIQUE,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    role VARCHAR(30) NOT NULL
+    role VARCHAR(30) NOT NULL,
+    password VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE products(

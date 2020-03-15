@@ -1,21 +1,27 @@
 package ua.lviv.lgs.daos;
 
+import org.apache.log4j.Logger;
 import ua.lviv.lgs.ConnectionUtil;
 import ua.lviv.lgs.entities.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 public class UserDao implements CRUD<User> {
+    private static Logger LOG = Logger.getLogger(UserDao.class);
+
     private Connection connection;
     private static final String SELECT_BY_ID = "SELECT * FROM users WHERE id=?";
     private static final String SELECT_ALL = "SELECT * FROM users";
     private static final String UPDATE =
-            "UPDATE users SET email=?, first_name=?, last_name=?, role=? WHERE id=?";
+            "UPDATE users SET email=?, first_name=?, last_name=?, role=?, password=? WHERE id=?";
     private static final String DELETE_BY_ID = "DELETE FROM users WHERE id=?";
     private static final String INSERT =
-            "INSERT INTO users(email, first_name, last_name, role) VALUES (?, ?, ?, ?)";
+            "INSERT INTO users(email, first_name, last_name, role, password) VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_BY_EMAIL = "SELECT * FROM users WHERE email=?";
 
     public UserDao() {
         connection = ConnectionUtil.getConnection();
@@ -23,7 +29,7 @@ public class UserDao implements CRUD<User> {
 
 
     @Override
-    public User getById(int id) {
+    public Optional<User> getById(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
 
@@ -31,30 +37,37 @@ public class UserDao implements CRUD<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             resultSet.next();
-            return User.of(resultSet);
+
+            return Optional.ofNullable(User.of(resultSet));
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find user");
+            String error = String.format("Can't find user with id = %d", id);
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 
     @Override
-    public List<User> getAll() {
+    public Optional<List<User>> getAll() {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
 
             List<User> users = new ArrayList<>();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 users.add(User.of(resultSet));
             }
 
-            return users;
+            Optional<List<User>> optionalUsers = Optional.ofNullable(users);
+
+            return optionalUsers;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find users");
+            String error = "Can't find users";
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 
     @Override
@@ -66,12 +79,13 @@ public class UserDao implements CRUD<User> {
             preparedStatement.setString(2, user.getFirstName());
             preparedStatement.setString(3, user.getLastName());
             preparedStatement.setString(4, user.getRole());
-            preparedStatement.setInt(5, id);
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setInt(6, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't update user");
+            String error = String.format("Can't update user with id = %d", id);
+            LOG.error(error, e);
         }
     }
 
@@ -82,13 +96,16 @@ public class UserDao implements CRUD<User> {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't delete user");
+            String error = String.format("Can't delete user with id = %d", id);
+            LOG.error(error, e);
         }
     }
 
     @Override
     public int insert(User user) {
+        String message = String.format("Will create new user with email = %s", user.getEmail());
+        LOG.debug(message);
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
@@ -96,16 +113,41 @@ public class UserDao implements CRUD<User> {
             preparedStatement.setString(2, user.getFirstName());
             preparedStatement.setString(3, user.getLastName());
             preparedStatement.setString(4, user.getRole());
+            preparedStatement.setString(5, user.getPassword());
             preparedStatement.executeUpdate();
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 
             generatedKeys.next();
 
+            message = String.format("Created a new user with email = %s and id = %d",
+                    user.getEmail(), generatedKeys.getInt(1));
+            LOG.info(message);
+
             return generatedKeys.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't insert user");
+            String error = String.format("Can't create user with email = %s", user.getEmail());
+            LOG.error(error, e);
         }
+
+        return 0;
+    }
+
+    public Optional<User> getByEmail(String email) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_EMAIL);
+
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()){
+                return Optional.of(User.of(resultSet));
+            }
+        } catch (SQLException e) {
+            String error = String.format("Can'r find user with email = %s", email);
+            LOG.error(error, e);
+        }
+
+        return Optional.empty();
     }
 }

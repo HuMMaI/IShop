@@ -4,6 +4,7 @@ import ua.lviv.lgs.daos.UserDao;
 import ua.lviv.lgs.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserService {
     private UserDao userDao;
@@ -22,11 +23,11 @@ public class UserService {
         return userService;
     }
 
-    public User getById(int id){
+    public Optional<User> getById(int id){
         return userDao.getById(id);
     }
 
-    public List<User> getAll(){
+    public Optional<List<User>> getAll(){
         return userDao.getAll();
     }
 
@@ -40,5 +41,9 @@ public class UserService {
 
     public int insert(User user){
         return userDao.insert(user);
+    }
+
+    public Optional<User> getByEmail(String email) {
+        return userDao.getByEmail(email);
     }
 }

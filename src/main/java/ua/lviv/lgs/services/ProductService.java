@@ -4,6 +4,7 @@ import ua.lviv.lgs.daos.ProductDao;
 import ua.lviv.lgs.entities.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductService {
     private ProductDao productDao;
@@ -22,11 +23,11 @@ public class ProductService {
         return productService;
     }
 
-    public Product getById(int id){
+    public Optional<Product> getById(int id){
         return productDao.getById(id);
     }
 
-    public List<Product> getAll(){
+    public Optional<List<Product>> getAll(){
         return productDao.getAll();
     }
 
