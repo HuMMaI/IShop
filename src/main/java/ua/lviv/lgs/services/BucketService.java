@@ -4,6 +4,7 @@ import ua.lviv.lgs.daos.BucketDao;
 import ua.lviv.lgs.entities.Bucket;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BucketService {
     private BucketDao bucketDao;
@@ -22,11 +23,11 @@ public class BucketService {
         return bucketService;
     }
 
-    public Bucket getById(int id){
+    public Optional<Bucket> getById(int id){
         return bucketDao.getById(id);
     }
 
-    public List<Bucket> getAll(){
+    public Optional<List<Bucket>> getAll(){
         return bucketDao.getAll();
     }
 

@@ -8,4 +8,9 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
   <display-name>Archetype Created Web Application</display-name>
+
+  <context-param>
+    <param-name>log4j-configuration</param-name>
+    <param-value>/WEB-INF/loggerConfig.xml</param-value>
+  </context-param>
 </web-app>

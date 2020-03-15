@@ -23,11 +23,11 @@ public class UserService {
         return userService;
     }
 
-    public User getById(int id){
+    public Optional<User> getById(int id){
         return userDao.getById(id);
     }
 
-    public List<User> getAll(){
+    public Optional<List<User>> getAll(){
         return userDao.getAll();
     }
 

@@ -29,9 +29,11 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if (ObjectUtils.allNotNull(firstName, lastName, email, password)){
-            userService.insert(new User(email, firstName, lastName, UserRole.USER.toString(), password));
-            req.setAttribute("userEmail", email);
-            req.getRequestDispatcher("cabinet.jsp").forward(req, resp);
+            if (!userService.getByEmail(email).isPresent()){
+                userService.insert(new User(email, firstName, lastName, UserRole.USER.toString(), password));
+                req.setAttribute("userEmail", email);
+                req.getRequestDispatcher("cabinet.jsp").forward(req, resp);
+            }
         }
 
         req.getRequestDispatcher("register.jsp").forward(req, resp);

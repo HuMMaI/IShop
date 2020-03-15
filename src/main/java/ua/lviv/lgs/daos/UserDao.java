@@ -8,8 +8,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 public class UserDao implements CRUD<User> {
+    private static Logger LOG = Logger.getLogger(UserDao.class);
+
     private Connection connection;
     private static final String SELECT_BY_ID = "SELECT * FROM users WHERE id=?";
     private static final String SELECT_ALL = "SELECT * FROM users";
@@ -26,7 +29,7 @@ public class UserDao implements CRUD<User> {
 
 
     @Override
-    public User getById(int id) {
+    public Optional<User> getById(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
 
@@ -34,30 +37,37 @@ public class UserDao implements CRUD<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             resultSet.next();
-            return User.of(resultSet);
+
+            return Optional.ofNullable(User.of(resultSet));
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find user");
+            String error = String.format("Can't find user with id = %d", id);
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 
     @Override
-    public List<User> getAll() {
+    public Optional<List<User>> getAll() {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
 
             List<User> users = new ArrayList<>();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 users.add(User.of(resultSet));
             }
 
-            return users;
+            Optional<List<User>> optionalUsers = Optional.ofNullable(users);
+
+            return optionalUsers;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find users");
+            String error = "Can't find users";
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 
     @Override
@@ -74,8 +84,8 @@ public class UserDao implements CRUD<User> {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't update user");
+            String error = String.format("Can't update user with id = %d", id);
+            LOG.error(error, e);
         }
     }
 
@@ -86,13 +96,16 @@ public class UserDao implements CRUD<User> {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't delete user");
+            String error = String.format("Can't delete user with id = %d", id);
+            LOG.error(error, e);
         }
     }
 
     @Override
     public int insert(User user) {
+        String message = String.format("Will create new user with email = %s", user.getEmail());
+        LOG.debug(message);
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
@@ -107,11 +120,17 @@ public class UserDao implements CRUD<User> {
 
             generatedKeys.next();
 
+            message = String.format("Created a new user with email = %s and id = %d",
+                    user.getEmail(), generatedKeys.getInt(1));
+            LOG.info(message);
+
             return generatedKeys.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't insert user");
+            String error = String.format("Can't create user with email = %s", user.getEmail());
+            LOG.error(error, e);
         }
+
+        return 0;
     }
 
     public Optional<User> getByEmail(String email) {
@@ -124,11 +143,11 @@ public class UserDao implements CRUD<User> {
             if (resultSet.next()){
                 return Optional.of(User.of(resultSet));
             }
-
-            return Optional.empty();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't find user");
+            String error = String.format("Can'r find user with email = %s", email);
+            LOG.error(error, e);
         }
+
+        return Optional.empty();
     }
 }
