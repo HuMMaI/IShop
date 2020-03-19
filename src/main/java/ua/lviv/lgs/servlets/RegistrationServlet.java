@@ -31,11 +31,12 @@ public class RegistrationServlet extends HttpServlet {
         if (ObjectUtils.allNotNull(firstName, lastName, email, password)){
             if (!userService.getByEmail(email).isPresent()){
                 userService.insert(new User(email, firstName, lastName, UserRole.USER.toString(), password));
-                req.setAttribute("userEmail", email);
-                req.getRequestDispatcher("cabinet.jsp").forward(req, resp);
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+                return;
             }
         }
 
-        req.getRequestDispatcher("register.jsp").forward(req, resp);
+        resp.setContentType("text/plain");
+        resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 }
