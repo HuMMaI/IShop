@@ -22,9 +22,11 @@
 </head>
 <body>
 <div class="page-wrapper chiller-theme toggled">
-    <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
-        <i class="fas fa-bars"></i>
-    </a>
+    <div id="show-sidebar">
+        <a class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+    </div>
     <nav id="sidebar" class="sidebar-wrapper">
         <div class="sidebar-content">
             <div class="sidebar-brand">
@@ -130,7 +132,7 @@
                 <i class="fa fa-cog"></i>
                 <span class="badge-sonar"></span>
             </a>
-            <a href="#">
+            <a class="logout-btn" href="#">
                 <i class="fa fa-power-off"></i>
             </a>
         </div>
