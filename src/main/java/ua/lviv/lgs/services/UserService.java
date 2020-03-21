@@ -2,6 +2,7 @@ package ua.lviv.lgs.services;
 
 import ua.lviv.lgs.daos.UserDao;
 import ua.lviv.lgs.entities.User;
+import ua.lviv.lgs.entities.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,8 +40,16 @@ public class UserService {
         userDao.update(id, user);
     }
 
-    public int insert(User user){
-        return userDao.insert(user);
+    public int insert(String email, String firstName, String lastName, String role, String password){
+        return userDao.insert(
+                User.builder()
+                .setEmail(email)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setRole(role)
+                .setPassword(password)
+                .build()
+        );
     }
 
     public Optional<User> getByEmail(String email) {
