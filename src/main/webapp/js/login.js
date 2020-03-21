@@ -15,6 +15,18 @@ function showForm() {
     }
 }
 
+function returnForm() {
+    $('.login-box').delay(1850).slideDown("slow");
+
+    $("input.email").val('');
+    $("input.password").val('');
+
+    if ($("#login-btn").text() === "Register") {
+        $("input.firstName").val('');
+        $("input.lastName").val('');
+    }
+}
+
 $('#login-btn').click(function () {
     $('.login-box').slideUp("slow");
     if ($('#login-btn').text() === "Login") {
@@ -48,10 +60,13 @@ $('#login-btn').click(function () {
                             });
                     } else {
                         alert("error while authorizing a user");
+
+                        returnForm();
                     }
                 })
                 .fail(function () {
                     alert("error while authorizing a user");
+                    returnForm();
                 });
         }
     } else {
@@ -91,10 +106,14 @@ $('#login-btn').click(function () {
                         showForm();
                     } else {
                         alert("error while creating a user");
+
+                        returnForm();
                     }
                 })
                 .fail(function () {
                     alert("error while creating a user");
+
+                    returnForm();
                 });
         }
     }
