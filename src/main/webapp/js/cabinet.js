@@ -2,9 +2,7 @@ $(".sidebar-dropdown > a").click(function() {
     $(".sidebar-submenu").slideUp(200);
     if ($(this).parent().hasClass("active")) {
         $(".sidebar-dropdown").removeClass("active");
-        $(this)
-            .parent()
-            .removeClass("active");
+        $(this).parent().removeClass("active");
     } else {
         $(".sidebar-dropdown").removeClass("active");
         $(this)
