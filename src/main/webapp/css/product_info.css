@@ -1,0 +1,38 @@
+.content{
+    width: 100%;
+}
+
+.product-list{
+    padding-left: 30px;
+}
+
+.table >thead{
+    color: white;
+}
+
+.product-form {
+    position: fixed;
+    display: block;
+    height: 100%;
+    right: -100%;
+    top: 0;
+    z-index: 1;
+    transition: right 2s;
+    color: white;
+}
+
+.product-form.active {
+    right: 0;
+    transition: right 1s;
+}
+
+.product-list{
+    left: 17%;
+    transition: left 1s;
+}
+
+.product-list.active{
+    left: 0;
+    transition: left 1s;
+}
+

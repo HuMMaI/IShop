@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 public class UserDao implements CRUD<User> {
     private static Logger LOG = Logger.getLogger(UserDao.class);
@@ -48,26 +47,24 @@ public class UserDao implements CRUD<User> {
     }
 
     @Override
-    public Optional<List<User>> getAll() {
+    public List<User> getAll() {
+        List<User> users = new ArrayList<>();
+
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-
-            List<User> users = new ArrayList<>();
 
             while (resultSet.next()) {
                 users.add(User.of(resultSet));
             }
 
-            Optional<List<User>> optionalUsers = Optional.ofNullable(users);
-
-            return optionalUsers;
+            return users;
         } catch (SQLException e) {
             String error = "Can't find users";
             LOG.error(error, e);
         }
 
-        return Optional.empty();
+        return users;
     }
 
     @Override

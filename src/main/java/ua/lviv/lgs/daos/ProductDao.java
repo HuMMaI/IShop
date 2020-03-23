@@ -44,24 +44,25 @@ public class ProductDao implements CRUD<Product> {
     }
 
     @Override
-    public Optional<List<Product>> getAll() {
+    public List<Product> getAll() {
+        List<Product> products = new ArrayList<>();
+
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
 
-            List<Product> products = new ArrayList<>();
 
             while(resultSet.next()){
                 products.add(Product.of(resultSet));
             }
 
-            return Optional.ofNullable(products);
+            return products;
         } catch (SQLException e) {
             String error = "Can't find products";
             LOG.error(error, e);
         }
 
-        return Optional.empty();
+        return products;
     }
 
     @Override

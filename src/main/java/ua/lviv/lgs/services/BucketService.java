@@ -3,6 +3,7 @@ package ua.lviv.lgs.services;
 import ua.lviv.lgs.daos.BucketDao;
 import ua.lviv.lgs.entities.Bucket;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class BucketService {
         return bucketDao.getById(id);
     }
 
-    public Optional<List<Bucket>> getAll(){
+    public List<Bucket> getAll(){
         return bucketDao.getAll();
     }
 
@@ -39,7 +40,13 @@ public class BucketService {
         bucketDao.update(id, bucket);
     }
 
-    public int insert(Bucket bucket){
-        return bucketDao.insert(bucket);
+    public int insert(int userId, int productId, Date purchaseDate){
+        return bucketDao.insert(
+                Bucket.builder()
+                        .setUserId(userId)
+                        .setProductId(productId)
+                        .setPurchaseDate(purchaseDate)
+                        .build()
+        );
     }
 }

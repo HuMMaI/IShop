@@ -44,24 +44,24 @@ public class BucketDao implements CRUD<Bucket>{
     }
 
     @Override
-    public Optional<List<Bucket>> getAll() {
+    public List<Bucket> getAll() {
+        List<Bucket> buckets = new ArrayList<>();
+
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-
-            List<Bucket> buckets = new ArrayList<>();
 
             while(resultSet.next()){
                 buckets.add(Bucket.of(resultSet));
             }
 
-            return Optional.ofNullable(buckets);
+            return buckets;
         } catch (SQLException e) {
             String error = "Can't find buckets";
             LOG.error(error, e);
         }
 
-        return Optional.empty();
+        return buckets;
     }
 
     @Override

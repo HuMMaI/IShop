@@ -30,7 +30,7 @@ public class RegistrationServlet extends HttpServlet {
 
         if (ObjectUtils.allNotNull(firstName, lastName, email, password)){
             if (!userService.getByEmail(email).isPresent()){
-                userService.insert(new User(email, firstName, lastName, UserRole.USER.toString(), password));
+                userService.insert(email, firstName, lastName, UserRole.USER.toString(), password);
                 resp.setStatus(HttpServletResponse.SC_CREATED);
                 return;
             }

@@ -1,10 +1,6 @@
 $(".sidebar-dropdown > a").click(function() {
     $(".sidebar-submenu").slideUp(200);
-    if (
-        $(this)
-            .parent()
-            .hasClass("active")
-    ) {
+    if ($(this).parent().hasClass("active")) {
         $(".sidebar-dropdown").removeClass("active");
         $(this)
             .parent()
@@ -26,3 +22,15 @@ $("#close-sidebar").click(function() {
 $("#show-sidebar").click(function() {
     $(".page-wrapper").addClass("toggled");
 });
+
+$(".logout-btn").click(function () {
+   $.get("logout")
+       .done(function (data, textStatus, xhr) {
+           window.location = window.origin + "/IShop_war/index.jsp";
+       })
+       .fail(function () {
+           alert("Can't logout");
+       });
+});
+
+

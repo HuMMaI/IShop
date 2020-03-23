@@ -27,7 +27,7 @@ public class ProductService {
         return productDao.getById(id);
     }
 
-    public Optional<List<Product>> getAll(){
+    public List<Product> getAll(){
         return productDao.getAll();
     }
 
@@ -39,7 +39,13 @@ public class ProductService {
         productDao.update(id, product);
     }
 
-    public int insert(Product product){
-        return productDao.insert(product);
+    public int insert(String name, String description, double price){
+        return productDao.insert(
+                Product.builder()
+                        .setName(name)
+                        .setDescription(description)
+                        .setPrice(price)
+                        .build()
+        );
     }
 }

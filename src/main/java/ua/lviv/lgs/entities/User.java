@@ -12,21 +12,59 @@ public class User {
     private String role;
     private String password;
 
-    public User(int id, String email, String firstName, String lastName, String role, String password) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.role = role;
-        this.password = password;
+    public static Builder builder(){
+        return new Builder();
     }
 
-    public User(String email, String firstName, String lastName, String role, String password) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.role = role;
-        this.password = password;
+    public static class Builder {
+        private int id;
+        private String email;
+        private String firstName;
+        private String lastName;
+        private String role;
+        private String password;
+
+        public Builder setId(int id){
+            this.id = id;
+            return this;
+        }
+
+        public Builder setEmail(String email){
+            this.email = email;
+            return this;
+        }
+
+        public Builder setFirstName(String firstName){
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder setLastName(String lastName){
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder setRole(String role){
+            this.role = role;
+            return this;
+        }
+
+        public Builder setPassword(String password){
+            this.password = password;
+            return this;
+        }
+
+        public User build(){
+            User user = new User();
+            user.setId(id);
+            user.setEmail(email);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setRole(role);
+            user.setPassword(password);
+
+            return user;
+        }
     }
 
     public static User of(ResultSet resultSet){
@@ -38,7 +76,14 @@ public class User {
             String role = resultSet.getString("role");
             String password = resultSet.getString("password");
 
-            return new User(id, email, firstName, lastName, role, password);
+            return User.builder()
+                    .setId(id)
+                    .setEmail(email)
+                    .setFirstName(firstName)
+                    .setLastName(lastName)
+                    .setRole(role)
+                    .setPassword(password)
+                    .build();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Can't create user");
