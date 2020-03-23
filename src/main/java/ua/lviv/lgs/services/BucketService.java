@@ -28,7 +28,7 @@ public class BucketService {
         return bucketDao.getById(id);
     }
 
-    public Optional<List<Bucket>> getAll(){
+    public List<Bucket> getAll(){
         return bucketDao.getAll();
     }
 

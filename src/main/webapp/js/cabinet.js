@@ -1,10 +1,6 @@
 $(".sidebar-dropdown > a").click(function() {
     $(".sidebar-submenu").slideUp(200);
-    if (
-        $(this)
-            .parent()
-            .hasClass("active")
-    ) {
+    if ($(this).parent().hasClass("active")) {
         $(".sidebar-dropdown").removeClass("active");
         $(this)
             .parent()
@@ -36,3 +32,5 @@ $(".logout-btn").click(function () {
            alert("Can't logout");
        });
 });
+
+
