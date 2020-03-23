@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet("/register")
 public class RegistrationServlet extends HttpServlet {
@@ -28,12 +29,12 @@ public class RegistrationServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        if (ObjectUtils.allNotNull(firstName, lastName, email, password)){
-            if (!userService.getByEmail(email).isPresent()){
-                userService.insert(email, firstName, lastName, UserRole.USER.toString(), password);
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-                return;
-            }
+        Optional<User> user = userService.getByEmail(email);
+
+        if (ObjectUtils.allNotNull(firstName, lastName, email, password) && !user.isPresent()) {
+            userService.insert(email, firstName, lastName, UserRole.USER.toString(), password);
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+            return;
         }
 
         resp.setContentType("text/plain");
