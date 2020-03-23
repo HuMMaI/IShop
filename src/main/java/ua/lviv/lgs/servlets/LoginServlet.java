@@ -31,14 +31,13 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-            Optional<User> user = userService.getByEmail(email);
+            Optional<User> user = userService.getByEmailAndPassword(email, password);
 
-        if (user.isPresent() && user.get().getPassword().equals(password)){
+        if (user.isPresent()){
             resp.setStatus(HttpServletResponse.SC_OK);
 
             return;
         }
-
         resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 }
