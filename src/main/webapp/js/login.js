@@ -49,13 +49,10 @@ function loginPost(userLogin) {
                 await sleep(1300);
 
                 var info = {
-                    email
+                    email: userLogin.email
                 };
 
-                $.post("cabinet", info)
-                    .done(function () {
-                        window.location.href = "cabinet.jsp";
-                    });
+                cabinetPost(info)
             } else {
                 alert("error while authorizing a user");
 
@@ -77,8 +74,8 @@ function loginListener() {
         $('.login-box').slideDown("slow");
     } else {
         var userLogin = {
-            email,
-            password
+            email: email,
+            password: password
         }
 
         loginPost(userLogin);
@@ -99,10 +96,10 @@ function registrationListener() {
         $('.login-box').slideDown("slow");
     } else {
         var userRegistration = {
-            firstName,
-            lastName,
-            email,
-            password
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password
         };
 
         registrationPost(userRegistration);
@@ -111,20 +108,22 @@ function registrationListener() {
 
 function registrationPost(userRegistration) {
     $.post("register", userRegistration)
-        .done(function (data, textStatus, xhr) {
+        .done(async function (data, textStatus, xhr) {
             if (xhr.status === 201) {
                 $("input.firstName").val('');
                 $("input.lastName").val('');
                 $("input.email").val('');
                 $("input.password").val('');
 
-                $('.success-box h1').text('You have successfully registered!');
-                $('.success-box').delay(600).fadeIn("slow");
-                $('.success-box').delay(600).fadeOut(550);
+                $('.success-box h1').text('You have successfully registered!');;
 
-                $('.login-box').delay(1850).slideDown("slow");
+                var info = {
+                    email: userRegistration.email
+                };
 
-                showForm();
+                await sleep(1000);
+
+                cabinetPost(info);
             } else {
                 alert("error while creating a user");
 
@@ -135,5 +134,12 @@ function registrationPost(userRegistration) {
             alert("error while creating a user");
 
             returnForm();
+        });
+}
+
+function cabinetPost(info) {
+    $.post("cabinet", info)
+        .done(function () {
+            window.location.href = "cabinet.jsp";
         });
 }
