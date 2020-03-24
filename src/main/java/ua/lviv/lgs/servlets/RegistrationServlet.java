@@ -29,9 +29,14 @@ public class RegistrationServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
+        if (ObjectUtils.allNotNull(firstName, lastName, email, password)) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         Optional<User> user = userService.getByEmail(email);
 
-        if (ObjectUtils.allNotNull(firstName, lastName, email, password) && !user.isPresent()) {
+        if (!user.isPresent()) {
             req.getSession().setAttribute("email", email);
             userService.insert(email, firstName, lastName, UserRole.USER.toString(), password);
             resp.setStatus(HttpServletResponse.SC_CREATED);
