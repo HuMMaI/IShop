@@ -34,6 +34,7 @@ public class LoginServlet extends HttpServlet {
             Optional<User> user = userService.getByEmailAndPassword(email, password);
 
         if (user.isPresent()){
+            req.getSession().setAttribute("email", email);
             resp.setStatus(HttpServletResponse.SC_OK);
 
             return;

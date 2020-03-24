@@ -48,11 +48,7 @@ function loginPost(userLogin) {
 
                 await sleep(1300);
 
-                var info = {
-                    email: userLogin.email
-                };
-
-                cabinetPost(info)
+                window.location = window.origin + "/IShop/cabinet";
             } else {
                 alert("error while authorizing a user");
 
@@ -117,13 +113,9 @@ function registrationPost(userRegistration) {
 
                 $('.success-box h1').text('You have successfully registered!');;
 
-                var info = {
-                    email: userRegistration.email
-                };
-
                 await sleep(1000);
 
-                cabinetPost(info);
+                window.location = window.origin + "/IShop/cabinet";
             } else {
                 alert("error while creating a user");
 
@@ -134,12 +126,5 @@ function registrationPost(userRegistration) {
             alert("error while creating a user");
 
             returnForm();
-        });
-}
-
-function cabinetPost(info) {
-    $.post("cabinet", info)
-        .done(function () {
-            window.location.href = "cabinet.jsp";
         });
 }

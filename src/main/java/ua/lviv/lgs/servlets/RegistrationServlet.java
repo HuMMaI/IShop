@@ -32,6 +32,7 @@ public class RegistrationServlet extends HttpServlet {
         Optional<User> user = userService.getByEmail(email);
 
         if (ObjectUtils.allNotNull(firstName, lastName, email, password) && !user.isPresent()) {
+            req.getSession().setAttribute("email", email);
             userService.insert(email, firstName, lastName, UserRole.USER.toString(), password);
             resp.setStatus(HttpServletResponse.SC_CREATED);
             return;
