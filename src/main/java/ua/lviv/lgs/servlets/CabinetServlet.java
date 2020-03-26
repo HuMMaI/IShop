@@ -25,10 +25,12 @@ public class CabinetServlet extends HttpServlet {
         Optional<User> user = userService.getByEmail(email);
 
         if (user.isPresent()){
+            int id = user.get().getId();
             String firstName = user.get().getFirstName();
             String lastName = user.get().getLastName();
             String role = user.get().getRole();
 
+            req.getSession().setAttribute("userId", id);
             req.getSession().setAttribute("firstName", firstName);
             req.getSession().setAttribute("lastName", lastName);
             req.getSession().setAttribute("role", role);

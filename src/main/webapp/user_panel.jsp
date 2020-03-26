@@ -62,15 +62,17 @@
                     <div class="sidebar-submenu">
                         <ul>
                             <li>
-                                <a href="#">Catalog 1
-                                    <span class="badge badge-pill badge-success">Pro</span>
+                                <a href="products_page.jsp">All products</a>
+                            </li>
+                            <li>
+                                <a href="#">Catalog 2
+                                    <span class="badge badge-pill badge-success">Soon</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">Catalog 2</a>
-                            </li>
-                            <li>
-                                <a href="#">Catalog 3</a>
+                                <a href="#">Catalog 3
+                                    <span class="badge badge-pill badge-success">Soon</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
