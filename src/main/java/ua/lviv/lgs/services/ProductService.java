@@ -5,6 +5,7 @@ import ua.lviv.lgs.entities.Product;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class ProductService {
     private ProductDao productDao;
@@ -47,5 +48,9 @@ public class ProductService {
                         .setPrice(price)
                         .build()
         );
+    }
+
+    public List<Product> getByIds(Set<Integer> productIds) {
+        return productDao.getByIds(productIds);
     }
 }
