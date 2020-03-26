@@ -86,7 +86,7 @@
                     <div class="sidebar-submenu">
                         <ul>
                             <li>
-                                <span><a href="#">Orders</a></span>
+                                <span><a href="bucket_orders.jsp">Orders</a></span>
                             </li>
                             <li>
                                 <a href="#">Credit cards</a>
