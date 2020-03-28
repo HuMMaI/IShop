@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
-@WebFilter({"/product_info.jsp"})
+@WebFilter({"/product-catalog"})
 public class AdminFilter implements Filter {
     private FilterService filterService = FilterService.getInstance();
 
