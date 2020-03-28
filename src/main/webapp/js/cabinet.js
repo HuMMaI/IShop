@@ -24,7 +24,7 @@ $("#show-sidebar").click(function() {
 $(".logout-btn").click(function () {
    $.get("logout")
        .done(function (data, textStatus, xhr) {
-           window.location = window.origin + "/IShop/index.jsp";
+           window.location = window.origin + "/IShop/";
        })
        .fail(function () {
            alert("Can't logout");

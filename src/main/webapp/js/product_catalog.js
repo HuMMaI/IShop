@@ -51,7 +51,7 @@ function getProducts (){
         $("#product-items").empty();
     }
 
-    $.getJSON("add-product")
+    $.getJSON("api/product-catalog")
         .done(function (data) {
             for (var i = 0; i < data.length; i++){
                 var $newRow = $("<tr style='color: white'>" +

@@ -6,7 +6,7 @@ $.get("api/product")
                 cardsInfo += "<div class=\"row row-cols-1 row-cols-md-3\">";
             }
 
-            var idLink = "window.location = window.origin + '/IShop/products?id=" + product.id + "'";
+            var idLink = "window.location = window.origin + '/IShop/single-product?id=" + product.id + "'";
 
             cardsInfo +=
                 "<div class=\"col-3 mb-4\">" +

@@ -8,6 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProductDao implements CRUD<Product> {
     private static Logger LOG = Logger.getLogger(ProductDao.class);
@@ -20,6 +22,7 @@ public class ProductDao implements CRUD<Product> {
     private static final String DELETE_BY_ID = "DELETE FROM products WHERE id=?";
     private static final String INSERT =
             "INSERT INTO products(name, description, price) VALUES (?, ?, ?)";
+    private static final String SELECT_ALL_IN = "SELECT * FROM products WHERE id IN";
 
     public ProductDao() {
         this.connection = ConnectionUtil.getConnection();
@@ -118,5 +121,28 @@ public class ProductDao implements CRUD<Product> {
         }
 
         return 0;
+    }
+
+    public List<Product> getByIds(Set<Integer> productIds) {
+        List<Product> products = new ArrayList<>();
+
+        try {
+            String ids = productIds.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
+
+            String query = String.format("%s (%s)", SELECT_ALL_IN, ids);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                products.add(Product.of(resultSet));
+            }
+        } catch (SQLException e) {
+            String error = "Can't get products";
+            LOG.error(error, e);
+        }
+
+        return products;
     }
 }

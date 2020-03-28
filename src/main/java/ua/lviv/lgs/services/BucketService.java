@@ -6,6 +6,7 @@ import ua.lviv.lgs.entities.Bucket;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BucketService {
     private BucketDao bucketDao;
@@ -48,5 +49,12 @@ public class BucketService {
                         .setPurchaseDate(purchaseDate)
                         .build()
         );
+    }
+
+    public List<Bucket> getAllByUserId(int userId) {
+        return bucketDao.getAll()
+                .stream()
+                .filter(bucket -> bucket.getUserId() == userId)
+                .collect(Collectors.toList());
     }
 }
