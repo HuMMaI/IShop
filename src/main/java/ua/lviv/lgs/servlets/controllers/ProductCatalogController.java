@@ -1,4 +1,4 @@
-package ua.lviv.lgs.servlets;
+package ua.lviv.lgs.servlets.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/add-product")
-public class ProductAddServlet extends HttpServlet {
+@WebServlet("/api/product-catalog")
+public class ProductCatalogController extends HttpServlet {
     private ProductService productService = ProductService.getInstance();
 
     @Override

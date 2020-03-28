@@ -62,7 +62,7 @@
                     <div class="sidebar-submenu">
                         <ul>
                             <li>
-                                <a href="products_page.jsp">All products</a>
+                                <a href="products">All products</a>
                             </li>
                             <li>
                                 <a href="#">Catalog 2
@@ -86,7 +86,7 @@
                     <div class="sidebar-submenu">
                         <ul>
                             <li>
-                                <span><a href="bucket_orders.jsp">Orders</a></span>
+                                <span><a href="bucket">Orders</a></span>
                             </li>
                             <li>
                                 <a href="#">Credit cards</a>
@@ -101,7 +101,7 @@
                     </a>
                 </li>
                 <li>
-                    <a id="product-btn" href="product_info.jsp">
+                    <a id="product-btn" href="product-catalog">
                         <i class="fas fa-shopping-bag"></i>
                         <span>Add product</span>
                         <span class="badge badge-pill badge-danger">Admin</span>
