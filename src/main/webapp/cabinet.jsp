@@ -14,7 +14,7 @@
     <title>Hello, world!</title>
 </head>
 <body>
-<div class="page-wrapper chiller-theme toggled">
+<div class="page-wrapper chiller-theme">
     <jsp:include page="user_panel.jsp"></jsp:include>
     <!-- sidebar-wrapper  -->
     <main class="page-content">
