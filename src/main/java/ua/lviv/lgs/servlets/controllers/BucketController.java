@@ -1,4 +1,4 @@
-package ua.lviv.lgs.servlets;
+package ua.lviv.lgs.servlets.controllers;
 
 import com.google.gson.Gson;
 import ua.lviv.lgs.dtos.BucketProductDto;
