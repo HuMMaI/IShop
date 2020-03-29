@@ -15,7 +15,7 @@ $("#add-btn").click(function (event) {
     var description = $("#product-description").val();
     var price = $("#product-price").val();
 
-    if (name == '' || description == '' || price == ''){
+    if (name == '' || description == '' || price == '') {
         alert("Please, fill all fields!");
     } else {
         var productInfo = {
@@ -26,7 +26,7 @@ $("#add-btn").click(function (event) {
 
         $.post("add-product", productInfo)
             .done(function (data, textStatus, xhr) {
-                if (xhr.status == 200){
+                if (xhr.status == 200) {
                     $("#product-name").val('');
                     $("#product-description").val('');
                     $("#product-price").val('');
@@ -42,30 +42,48 @@ $("#add-btn").click(function (event) {
     }
 });
 
-$(document).ready(function () {
-    getProducts();
-});
 
-function getProducts (){
-    if ($("#product-items").children().length !== 0){
-        $("#product-items").empty();
-    }
+$.get("api/product-catalog")
+    .done(function (data) {
+        var newRow = "";
 
-    $.getJSON("api/product-catalog")
-        .done(function (data) {
-            for (var i = 0; i < data.length; i++){
-                var $newRow = $("<tr style='color: white'>" +
-                    "<td>" + data[i].id + "</td>" +
-                    "<td>" + data[i].name + "</td>" +
-                    "<td>" + data[i].description + "</td>" +
-                    "<td>" + data[i].price + "</td>" +
-                    "<td> SOON </td>" +
-                    "</tr>");
-
-                $("#product-items").append($newRow);
-            }
-        })
-        .fail(function () {
-            alert("Fail");
+        jQuery.each(data, function (i, item) {
+            newRow += "<tr style='color: white'>" +
+                "<td>" + item.id + "</td>" +
+                "<td>" + item.name + "</td>" +
+                "<td>" + item.description + "</td>" +
+                "<td>" + item.price + "</td>" +
+                "<td>" +
+                "<button type=\"button\" class=\"btn btn-outline-danger btn-xs remove-product\" product-id='" + item.id + "'>" +
+                "<i class=\"fa fa-trash\" aria-hidden=\"true\"></i>" +
+                "</button>" +
+                "</td>" +
+                "</tr>";
         });
+
+        $("#product-items").html(newRow);
+        addListenerToRemoveButton();
+    })
+    .fail(function () {
+        alert("Fail");
+    });
+
+function addListenerToRemoveButton() {
+    $("button.remove-product").click(function (event) {
+        event.preventDefault();
+
+        var productId = event.target.attributes["product-id"].value;
+
+        $.ajax({
+            url: 'api/product-catalog?productId=' + productId,
+            type: 'DELETE'
+        })
+            .done(function () {
+                alert("Success!!");
+                location.reload();
+            })
+            .fail(function () {
+                alert("Fail!!");
+            });
+    });
 }

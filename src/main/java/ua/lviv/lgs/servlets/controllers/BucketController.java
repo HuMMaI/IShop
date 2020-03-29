@@ -75,6 +75,5 @@ public class BucketController extends HttpServlet {
             resp.getWriter().write("Error!!!");
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
-
     }
 }
