@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
-@WebFilter({"/products", "/bucket", "/single-product"})
+@WebFilter({"/products", "/bucket", "/single-product", "/cabinet"})
 public class UserFilter implements Filter {
     private FilterService filterService = FilterService.getInstance();
 

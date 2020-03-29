@@ -57,6 +57,12 @@
                 <li class="header-menu">
                     <span>General</span>
                 </li>
+                <li>
+                    <a href="cabinet">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
                 <li class="sidebar-dropdown">
                     <a href="#">
                         <i class="fa fa-tachometer-alt"></i>

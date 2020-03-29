@@ -24,20 +24,17 @@ $("#add-btn").click(function (event) {
             price
         }
 
-        $.post("add-product", productInfo)
+        $.post("api/product-catalog", productInfo)
             .done(function (data, textStatus, xhr) {
                 if (xhr.status == 200) {
                     $("#product-name").val('');
                     $("#product-description").val('');
                     $("#product-price").val('');
 
-                    getProducts();
+                    location.reload();
                 } else {
                     alert("Error");
                 }
-            })
-            .fail(function () {
-                alert("Fail");
             });
     }
 });

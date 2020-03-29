@@ -10,6 +10,7 @@ function addListenerToRemoveButton(){
         })
             .done(function () {
                 alert("Success!!");
+
                 location.reload();
             })
             .fail(function () {
