@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
@@ -100,13 +103,15 @@
                         <span>Contacts</span>
                     </a>
                 </li>
-                <li>
-                    <a id="product-btn" href="product-catalog">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span>Add product</span>
-                        <span class="badge badge-pill badge-danger">Admin</span>
-                    </a>
-                </li>
+                <c:if test="${sessionScope['role'] == \"ADMIN\"}">
+                    <li>
+                        <a id="product-btn" href="product-catalog">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Add product</span>
+                            <span class="badge badge-pill badge-danger">Admin</span>
+                        </a>
+                    </li>
+                </c:if>
             </ul>
         </div>
         <!-- sidebar-menu  -->
@@ -136,4 +141,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="js/cabinet.js"></script>
+<script src="js/user_panel.js"></script>
