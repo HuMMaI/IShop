@@ -20,6 +20,7 @@ public class BucketDao implements CRUD<Bucket>{
     private static final String DELETE_BY_ID = "DELETE FROM bucket WHERE id=?";
     private static final String INSERT =
             "INSERT INTO bucket(user_id, product_id, purchase_date) VALUES (?, ?, ?)";
+    private static final String DELETE_BY_PRODUCT_ID = "DELETE FROM bucket WHERE product_id=?";
 
     public BucketDao() {
         connection = ConnectionUtil.getConnection();
@@ -115,5 +116,16 @@ public class BucketDao implements CRUD<Bucket>{
         }
 
         return 0;
+    }
+
+    public void deleteByProductId(int productId) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_PRODUCT_ID);
+            preparedStatement.setInt(1, productId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String error = String.format("Can't delete buckets with id = %d", productId);
+            LOG.error(error, e);
+        }
     }
 }

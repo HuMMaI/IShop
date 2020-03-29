@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.ObjectUtils;
+import ua.lviv.lgs.entities.Bucket;
 import ua.lviv.lgs.entities.Product;
+import ua.lviv.lgs.services.BucketService;
 import ua.lviv.lgs.services.ProductService;
 
 import javax.servlet.ServletException;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet("/api/product-catalog")
 public class ProductCatalogController extends HttpServlet {
@@ -62,5 +65,20 @@ public class ProductCatalogController extends HttpServlet {
 
         resp.setContentType("text/plain");
         resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int productId = Integer.parseInt(req.getParameter("productId"));
+        Optional<Product> product = productService.getById(productId);
+
+        if (product.isPresent()){
+            BucketService bucketService = new BucketService();
+            bucketService.deleteByProductId(productId);
+            productService.delete(productId);
+        } else {
+            resp.getWriter().write("Error!!!");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }

@@ -10,30 +10,56 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/cabinet.css">
+    <link rel="stylesheet" href="css/bucket_orders.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
     <title>Hello, world!</title>
 </head>
 <body>
-<div class="page-wrapper chiller-theme toggled">
+<div class="page-wrapper chiller-theme">
     <jsp:include page="user_panel.jsp"></jsp:include>
     <!-- sidebar-wrapper  -->
     <main class="page-content">
         <div class="container-fluid">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Purchase date</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody id="bucket-items">
+            <div class="container">
+                <div class="card shopping-cart">
+                    <div class="card-header bg-dark text-light">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        Shipping cart
+                    </div>
+                    <div class="card-body">
+                        <div class="bucket-products">
 
-                </tbody>
-            </table>
+                        </div>
+
+                        <div class="pull-right">
+                            <a href="" class="btn btn-outline-secondary float-right" id="btn-update">
+                                Update shopping cart
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="coupon col-md-5 col-sm-5 no-padding-left float-left">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="text" class="form-control" placeholder="cupone code">
+                                </div>
+                                <div class="col-6">
+                                    <input type="submit" class="btn btn-default" value="Use cupone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right" style="margin: 10px">
+                            <a href="" class="btn btn-success float-right">Checkout</a>
+                            <div class="float-right" id="full-price" style="margin: 5px">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
     <!-- page-content" -->

@@ -37,6 +37,10 @@ public class BucketService {
         bucketDao.delete(id);
     }
 
+    public void deleteByProductId(int productId) {
+        bucketDao.deleteByProductId(productId);
+    }
+
     public void update(int id, Bucket bucket){
         bucketDao.update(id, bucket);
     }

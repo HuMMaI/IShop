@@ -9,7 +9,14 @@ CREATE TABLE users(
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role VARCHAR(30) NOT NULL,
-    password VARCHAR(30) NOT NULL
+    password VARCHAR(30) NOT NULL,
+    username VARCHAR(30),
+    bio TEXT,
+    phone_number VARCHAR(15),
+    address VARCHAR(50),
+    age INT,
+    gender VARCHAR(10),
+    profession VARCHAR(10)
 );
 
 CREATE TABLE products(

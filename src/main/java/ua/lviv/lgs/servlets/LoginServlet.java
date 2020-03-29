@@ -31,10 +31,11 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-            Optional<User> user = userService.getByEmailAndPassword(email, password);
+        Optional<User> user = userService.getByEmailAndPassword(email, password);
 
         if (user.isPresent()){
             req.getSession().setAttribute("email", email);
+            req.getSession().setAttribute("role", user.get().getRole());
             resp.setStatus(HttpServletResponse.SC_OK);
 
             return;

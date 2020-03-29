@@ -36,9 +36,7 @@ public class UserService {
         userDao.delete(id);
     }
 
-    public void update(int id, User user){
-        userDao.update(id, user);
-    }
+
 
     public int insert(String email, String firstName, String lastName, String role, String password){
         return userDao.insert(
@@ -58,5 +56,23 @@ public class UserService {
 
     public Optional<User> getByEmailAndPassword(String email, String password) {
         return userDao.getByEmail(email).filter(user -> user.getPassword().equals(password));
+    }
+
+    public void update(int id, String firstName, String lastName, String username, String bio, String phoneNumber, String address, String email, String age, String gender, String profession) {
+        userDao.edit(
+                User.builder()
+                .setId(id)
+                .setEmail(email)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUsername(username)
+                .setBio(bio)
+                .setPhoneNumber(phoneNumber)
+                .setAddress(address)
+                .setAge(Integer.parseInt(age))
+                .setGender(gender)
+                .setProfession(profession)
+                .build()
+        );
     }
 }

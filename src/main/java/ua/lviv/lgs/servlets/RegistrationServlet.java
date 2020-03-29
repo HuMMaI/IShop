@@ -29,7 +29,7 @@ public class RegistrationServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        if (ObjectUtils.allNotNull(firstName, lastName, email, password)) {
+        if (!ObjectUtils.allNotNull(firstName, lastName, email, password)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

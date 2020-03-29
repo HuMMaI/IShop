@@ -21,6 +21,8 @@ public class UserDao implements CRUD<User> {
     private static final String INSERT =
             "INSERT INTO users(email, first_name, last_name, role, password) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_BY_EMAIL = "SELECT * FROM users WHERE email=?";
+    private static final String EDIT =
+            "UPDATE users SET email=?, first_name=?, last_name=?, username=?, bio=?, phone_number=?, address=?, age=?, gender=?, profession=? WHERE id=?";
 
     public UserDao() {
         connection = ConnectionUtil.getConnection();
@@ -146,5 +148,28 @@ public class UserDao implements CRUD<User> {
         }
 
         return Optional.empty();
+    }
+
+    public void edit(User user) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(EDIT);
+
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getFirstName());
+            preparedStatement.setString(3, user.getLastName());
+            preparedStatement.setString(4, user.getUsername());
+            preparedStatement.setString(5, user.getBio());
+            preparedStatement.setString(6, user.getPhoneNumber());
+            preparedStatement.setString(7, user.getAddress());
+            preparedStatement.setInt(8, user.getAge());
+            preparedStatement.setString(9, user.getGender());
+            preparedStatement.setString(10, user.getProfession());
+            preparedStatement.setInt(11, user.getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String error = String.format("Can't update user with id = %d", user.getId());
+            LOG.error(error, e);
+        }
     }
 }
