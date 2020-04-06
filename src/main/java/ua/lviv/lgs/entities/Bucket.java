@@ -1,14 +1,22 @@
 package ua.lviv.lgs.entities;
 
+import javax.persistence.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "bucket")
 public class Bucket {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "user_id")
     private int userId;
+    @Column(name = "product_id")
     private int productId;
+    @Column(name = "purchase_date")
     private Date purchaseDate;
 
     public static Builder builder(){

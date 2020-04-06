@@ -2,130 +2,81 @@ package ua.lviv.lgs.daos;
 
 import org.apache.log4j.Logger;
 import ua.lviv.lgs.ConnectionUtil;
+import ua.lviv.lgs.EntityManagerUtils;
 import ua.lviv.lgs.entities.Bucket;
 
+import javax.persistence.EntityManager;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class BucketDao implements CRUD<Bucket>{
     private static Logger LOG = Logger.getLogger(BucketDao.class);
 
-    private Connection connection;
-    private static final String SELECT_BY_ID = "SELECT * FROM bucket WHERE id=?";
-    private static final String SELECT_ALL = "SELECT * FROM bucket";
+    private static final String SELECT_ALL = "SELECT b FROM Bucket b";
     private static final String UPDATE =
-            "UPDATE bucket SET user_id=?, product_id=?, purchase_date=? WHERE id=?";
-    private static final String DELETE_BY_ID = "DELETE FROM bucket WHERE id=?";
-    private static final String INSERT =
-            "INSERT INTO bucket(user_id, product_id, purchase_date) VALUES (?, ?, ?)";
-    private static final String DELETE_BY_PRODUCT_ID = "DELETE FROM bucket WHERE product_id=?";
+            "UPDATE Bucket b SET b.userId = :userId, b.productId = :productId, b.purchaseDate = :purchaseDate WHERE b.id = :id";
+    private static final String DELETE_BY_PRODUCT_ID = "DELETE FROM Bucket b WHERE b.productId = :productId";
 
     public BucketDao() {
-        connection = ConnectionUtil.getConnection();
     }
 
     @Override
     public Optional<Bucket> getById(int id) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
-
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            resultSet.next();
-            return Optional.ofNullable(Bucket.of(resultSet));
-        } catch (SQLException e) {
-            String error = String.format("Can't find bucket with id = %d", id);
-            LOG.error(error, e);
-        }
-
-        return Optional.empty();
+        EntityManager entityManager = EntityManagerUtils.getEntityManager();
+        return Optional.ofNullable(entityManager.find(Bucket.class, id));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Bucket> getAll() {
-        List<Bucket> buckets = new ArrayList<>();
+        EntityManager entityManager = EntityManagerUtils.getEntityManager();
 
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-
-            while(resultSet.next()){
-                buckets.add(Bucket.of(resultSet));
-            }
-
-            return buckets;
-        } catch (SQLException e) {
-            String error = "Can't find buckets";
-            LOG.error(error, e);
-        }
-
-        return buckets;
+        return entityManager.createQuery(SELECT_ALL).getResultList();
     }
 
     @Override
     public void update(int id, Bucket bucket) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
+        EntityManager entityManager = EntityManagerUtils.getEntityManager();
 
-            preparedStatement.setInt(1, bucket.getUserId());
-            preparedStatement.setInt(2, bucket.getProductId());
-            preparedStatement.setTimestamp(3, new Timestamp(bucket.getPurchaseDate().getTime()));
-            preparedStatement.setInt(4, id);
+        entityManager.getTransaction().begin();
 
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            String error = String.format("Can't update bucket with id = %d", id);
-            LOG.error(error, e);
-        }
+        entityManager.createQuery(UPDATE)
+                .setParameter("userId", bucket.getUserId())
+                .setParameter("productId", bucket.getProductId())
+                .setParameter("purchaseDate", bucket.getPurchaseDate())
+                .setParameter("id", id);
+
+        entityManager.getTransaction().commit();
     }
 
     @Override
     public void delete(int id) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            String error = String.format("Can't delete bucket with id = %d", id);
-            LOG.error(error, e);
-        }
+        EntityManager entityManager = EntityManagerUtils.getEntityManager();
+
+        Bucket bucket = entityManager.find(Bucket.class, id);
+        entityManager.getTransaction().begin();
+        entityManager.remove(bucket);
+        entityManager.getTransaction().commit();
     }
 
     @Override
     public int insert(Bucket bucket) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+        EntityManager entityManager = EntityManagerUtils.getEntityManager();
 
-            preparedStatement.setInt(1, bucket.getUserId());
-            preparedStatement.setInt(2, bucket.getProductId());
-            preparedStatement.setTimestamp(3, new Timestamp(bucket.getPurchaseDate().getTime()));
-            preparedStatement.executeUpdate();
+        entityManager.getTransaction().begin();
+        entityManager.persist(bucket);
+        entityManager.getTransaction().commit();
 
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-
-            generatedKeys.next();
-
-            return generatedKeys.getInt(1);
-        } catch (SQLException e) {
-            String error = String.format("Can't create bucket with user id = %d and product id = %d",
-                    bucket.getUserId(), bucket.getProductId());
-            LOG.error(error, e);
-        }
-
-        return 0;
+        return bucket.getId();
     }
 
     public void deleteByProductId(int productId) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_PRODUCT_ID);
-            preparedStatement.setInt(1, productId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            String error = String.format("Can't delete buckets with id = %d", productId);
-            LOG.error(error, e);
-        }
+        EntityManager entityManager = EntityManagerUtils.getEntityManager();
+
+        entityManager.getTransaction().begin();
+        entityManager.createQuery(DELETE_BY_PRODUCT_ID)
+                .setParameter("productId", productId);
+        entityManager.getTransaction().commit();
     }
 }
