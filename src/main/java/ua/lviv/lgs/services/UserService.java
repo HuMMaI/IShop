@@ -58,7 +58,20 @@ public class UserService {
         return userDao.getByEmail(email).filter(user -> user.getPassword().equals(password));
     }
 
-    public void update(int id, String firstName, String lastName, String username, String bio, String phoneNumber, String address, String email, String age, String gender, String profession) {
+    public void update(int id, String email, String firstName, String lastName, String username, String password) {
+        userDao.update(
+                id,
+                User.builder()
+                .setEmail(email)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUsername(username)
+                .setPassword(password)
+                .build()
+        );
+    }
+
+    public void edit(int id, String firstName, String lastName, String username, String bio, String phoneNumber, String address, String email, String age, String gender, String profession){
         userDao.edit(
                 User.builder()
                 .setId(id)
