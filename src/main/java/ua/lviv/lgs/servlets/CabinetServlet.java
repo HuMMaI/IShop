@@ -77,7 +77,7 @@ public class CabinetServlet extends HttpServlet {
         int id = user.get().getId();
 
         if (ObjectUtils.allNotNull(firstName, lastName, username, bio, phoneNumber, address, email, age, gender, profession)){
-            userService.update(id, firstName, lastName, username, bio, phoneNumber, address, email, age, gender, profession);
+            userService.edit(id, firstName, lastName, username, bio, phoneNumber, address, email, age, gender, profession);
         }
     }
 }

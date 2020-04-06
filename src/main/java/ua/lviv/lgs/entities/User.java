@@ -1,23 +1,33 @@
 package ua.lviv.lgs.entities;
 
+import javax.persistence.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String email;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
     private String role;
     private String password;
     private String username;
     private String bio;
+    @Column(name = "phone_number")
     private String phoneNumber;
     private String address;
     private int age;
     private String gender;
     private String profession;
+
+    public User(){
+    }
 
     public static Builder builder() {
         return new Builder();
